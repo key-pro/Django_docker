@@ -1,18 +1,22 @@
-# ベースイメージとして公式のPython 3.12イメージを使用
-FROM python:3.12-slim
+# ベースイメージを指定
+FROM python:3.8
 
-# 作業ディレクトリを設定
-WORKDIR /app
+# 必要なシステムパッケージをインストール
+RUN apt-get update && apt-get install -y \
+    default-libmysqlclient-dev \
+    build-essential
 
-# 必要なパッケージをインストール
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+# 作業ディレクトリを指定
+WORKDIR /code
 
-# アプリケーションのソースコードをコピー
-COPY . /app/
+# 依存関係ファイルをコピー
+COPY requirements.txt /code/
 
-# ポート8000を公開
-EXPOSE 8000
+# 依存関係をインストール
+RUN pip install -r requirements.txt
 
-# サーバーを起動
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# アプリケーションコードをコピー
+COPY . /code/
+
+# コマンドを実行
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
