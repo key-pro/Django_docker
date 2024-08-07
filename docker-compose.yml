@@ -8,6 +8,11 @@ services:
       MYSQL_USER: stock_price_user
       MYSQL_PASSWORD: stock_price_password
       MYSQL_ROOT_PASSWORD: stock_price_password
+    healthcheck:  # ヘルスチェックの設定
+      test: ["CMD", "mysqladmin", "ping", "-h", "db", "-u", "stock_price_user", "-pstock_price_password"]
+      interval: 15s
+      timeout: 10s
+      retries: 51
     volumes:
       - mysql_data:/var/lib/mysql  # データ永続化のためのボリュームマウント
 
@@ -23,11 +28,7 @@ services:
     depends_on:  # dbサービスの起動を待機
       db:
         condition: service_healthy  # ヘルスチェックを追加
-    healthcheck:  # ヘルスチェックの設定
-      test: ["CMD", "mysqladmin", "ping", "-h", "db", "-u", "stock_price_user", "-pstock_price_password"]
-      interval: 15s
-      timeout: 10s
-      retries: 5
+    
 
 volumes:
   mysql_data:  # ボリューム名を保持
