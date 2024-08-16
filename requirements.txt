@@ -4,3 +4,6 @@ markdown
 django-filter
 mysqlclient
 yfinance
+LinearRegression
+numpy
+scikit-learn
