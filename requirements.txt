@@ -7,3 +7,5 @@ yfinance
 LinearRegression
 numpy
 scikit-learn
+tensorflow==2.13.1  # または必要なバージョンを指定
+gunicorn

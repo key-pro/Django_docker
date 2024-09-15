@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,7 +82,8 @@ DATABASES = {
         'NAME': 'stock_price',  # データベース名を指定
         'USER': 'stock_price_user',  # ユーザー名を指定
         'PASSWORD': 'stock_price_password',  # パスワードを指定
-        'HOST': 'db',  # Dockerコンテナのホスト名
+        'HOST': 'database-1.cziiyk6m88g0.ap-northeast-1.rds.amazonaws.com',  # Dockerコンテナのホスト名
+        #'HOST': os.environ['DB_HOST'],
         'PORT': '3306',  # MySQLのデフォルトポート
     }
 }

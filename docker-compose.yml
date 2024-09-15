@@ -18,7 +18,9 @@ services:
 
   web:
     build: .
-    command: python3 manage.py runserver 0.0.0.0:8000  # コマンドを更新
+    command: gunicorn manage:app -b 0.0.0.0:8000  # gunicornに変更
+    environment:
+      DB_HOST: db
     volumes:
       - .:/code  # マウントポイントを更新
     ports:
@@ -28,7 +30,6 @@ services:
     depends_on:  # dbサービスの起動を待機
       db:
         condition: service_healthy  # ヘルスチェックを追加
-    
 
 volumes:
   mysql_data:  # ボリューム名を保持

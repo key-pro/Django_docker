@@ -53,4 +53,3 @@ def predict_stock_price(request):
         predictions[f'predicted_price_{days}_days'] = next_price[0][0]  # 予測結果を辞書に追加
 
     return Response(predictions)  # 予測結果を返す
-
