@@ -1,18 +1,14 @@
-# Use this code snippet in your app.
-# If you need more information about configurations
-# or implementing the sample code, visit the AWS docs:
-# https://aws.amazon.com/developer/language/python/
-
+import ast
 import boto3
+import base64
 from botocore.exceptions import ClientError
 
 
-def get_secret():
+def lambda_handler(event, context):
 
     secret_name = "stock_price_API"
     region_name = "ap-northeast-1"
 
-    # Create a Secrets Manager client
     session = boto3.session.Session()
     client = session.client(
         service_name='secretsmanager',
@@ -23,11 +19,16 @@ def get_secret():
         get_secret_value_response = client.get_secret_value(
             SecretId=secret_name
         )
+        
     except ClientError as e:
-        # For a list of exceptions thrown, see
-        # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
-        raise e
-
-    secret = get_secret_value_response['SecretString']
-
-
+            raise e
+    else:
+        if 'SecretString' in get_secret_value_response:
+            secret_data = get_secret_value_response['SecretString']
+            secret = ast.literal_eval(secret_data)
+            name = secret['name']
+            pw = secret['pw']
+            print(f'name:{name},pw:{pw}')
+        else:
+            decoded_binary_secret = base64.b64decode(get_secret_value_response['SecretBinary'])
+            print(decoded_binary_secret)

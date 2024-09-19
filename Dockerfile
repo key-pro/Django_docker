@@ -18,7 +18,7 @@ COPY requirements.txt /code/
 RUN pip install --upgrade pip
 
 # 依存関係をインストール
-RUN pip install -r requirements.txt
+RUN pip install --default-timeout=1000 -r requirements.txt
 
 # アプリケーションコードをコピー
 COPY . /code/
