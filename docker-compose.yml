@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   db:
     image: mysql:8.0
@@ -7,7 +5,8 @@ services:
       MYSQL_DATABASE: stock_price
       MYSQL_USER: stock_price_user
       MYSQL_PASSWORD: stock_price_password
-      MYSQL_ROOT_PASSWORD: stock_price_password
+      MYSQL_ROOT_PASSWORD: stock_price_password  # ルートパスワードを設定
+      # MYSQL_ALLOW_EMPTY_PASSWORD: "yes"  # 空のパスワードを許可しない
     healthcheck:  # ヘルスチェックの設定
       test: ["CMD", "mysqladmin", "ping", "-h", "db", "-u", "stock_price_user", "-pstock_price_password"]
       interval: 15s
@@ -18,7 +17,7 @@ services:
 
   web:
     build: .
-    command: gunicorn manage:app -b 0.0.0.0:8000  # gunicornに変更
+    command: python3 manage.py runserver 0.0.0.0:8000
     environment:
       DB_HOST: db
     volumes:

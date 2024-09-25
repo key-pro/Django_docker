@@ -4,7 +4,7 @@ import base64
 from botocore.exceptions import ClientError
 
 
-def lambda_handler(event, context):
+def secret_manager():
 
     secret_name = "stock_price_API"
     region_name = "ap-northeast-1"
@@ -26,9 +26,10 @@ def lambda_handler(event, context):
         if 'SecretString' in get_secret_value_response:
             secret_data = get_secret_value_response['SecretString']
             secret = ast.literal_eval(secret_data)
-            name = secret['name']
-            pw = secret['pw']
-            print(f'name:{name},pw:{pw}')
+            print(secret)
         else:
             decoded_binary_secret = base64.b64decode(get_secret_value_response['SecretBinary'])
             print(decoded_binary_secret)
+
+if __name__ == "__main__":
+    secret_manager()

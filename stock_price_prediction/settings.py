@@ -12,6 +12,26 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+import secret
+import dotenv
+dotenv.load_dotenv()
+
+#ECSの場合はDBのホスト名をsecret_managerから取得する
+if os.getenv('ECS_CONTAINER_METADATA_URI', None):
+    secret = secret.secret_manager()
+    USERNAME = secret['USERNAME']
+    PASSWORD = secret['PASSWORD']
+    HOST = secret['HOST']
+    PORT = secret['PORT']
+    DB_NAME = secret['DB_NAME']
+else:
+    USERNAME = os.getenv('USERNAME')
+    PASSWORD = os.getenv('PASSWORD')
+    HOST = os.getenv('HOST')
+    PORT = os.getenv('PORT')
+    DB_NAME = os.getenv('DB_NAME')
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,12 +99,12 @@ WSGI_APPLICATION = 'stock_price_prediction.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'stock_price',  # データベース名を指定
-        'USER': 'stock_price_user',  # ユーザー名を指定
-        'PASSWORD': 'stock_price_password',  # パスワードを指定
-        'HOST': 'database-1.cziiyk6m88g0.ap-northeast-1.rds.amazonaws.com',  # Dockerコンテナのホスト名
+        'NAME': DB_NAME,  # データベース名を指定
+        'USER': USERNAME,  # ユーザー名を指定
+        'PASSWORD': PASSWORD,  # パスワードを指定
+        'HOST': HOST,  # Dockerコンテナのホスト名
         #'HOST': os.environ['DB_HOST'],
-        'PORT': '3306',  # MySQLのデフォルトポート
+        'PORT': PORT,  # MySQLのデフォルトポート
     }
 }
 
