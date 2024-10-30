@@ -19,11 +19,11 @@ dotenv.load_dotenv()
 #ECSの場合はDBのホスト名をsecret_managerから取得する
 if os.getenv('ECS_CONTAINER_METADATA_URI', None):
     secret = secret.secret_manager()
-    USERNAME = secret['USERNAME']
-    PASSWORD = secret['PASSWORD']
-    HOST = secret['HOST']
-    PORT = secret['PORT']
-    DB_NAME = secret['DB_NAME']
+    USERNAME = secret['username']
+    PASSWORD = secret['password']
+    HOST = secret['host']
+    PORT = secret['port']
+    DB_NAME = secret['dbname']
 else:
     USERNAME = os.getenv('USERNAME')
     PASSWORD = os.getenv('PASSWORD')

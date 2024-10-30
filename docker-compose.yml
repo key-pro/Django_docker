@@ -16,7 +16,9 @@ services:
       - mysql_data:/var/lib/mysql  # データ永続化のためのボリュームマウント
 
   web:
-    build: .
+    build: 
+      context: .
+      target: development
     command: python3 manage.py runserver 0.0.0.0:8000
     environment:
       DB_HOST: db
